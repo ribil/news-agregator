@@ -7,22 +7,18 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @EnableScheduling
@@ -42,13 +38,15 @@ public class ParserNewsServiceImpl {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String[] countries = {"us", "ru", "ua", "gb", "au"};
+        String[] categories = {"business", "entertainment", "general",
+                "health", "science", "sports", "technology"};
 
         for (int country = 0; country < 5; country++) {
-            for (int page = 1; page < 4; page++) {
+            for (int category = 0; category < 7; category++) {
 
                 String url = "https://newsapi.org/v2/top-headlines?" +
                         "pageSize=100" +
-                        "&page=" + page +
+                        "&category=" + categories[category] +
                         "&country=" + countries[country] +
                         "&apiKey=450cf8e8b0004e7b809d15f6f0f4e0db";
 
@@ -65,10 +63,58 @@ public class ParserNewsServiceImpl {
                 log.info(response.toString());
 
                 for (News n : list) {
+                    n.setCountry(countries[country]);
+                    n.setCategory(categories[category]);
 
-                    log.info(n.toString());
+                    /*String newsUrl = n.getUrl();
+
+                    StringBuilder sourceName = new StringBuilder();
+
+                    if(newsUrl.charAt(4) == 's'
+                            || newsUrl.charAt(9) == 'w'
+                            || newsUrl.charAt(10) == 'w'){
+                        int i = 12;
+                        char c = '-';
+                        while(c != '/') {
+                            c = newsUrl.charAt(i);
+                            sourceName.append(c);
+                            i++;
+                        }
+                    } else if(newsUrl.charAt(4) == 's'
+                            || newsUrl.charAt(8) != 'w'
+                            || newsUrl.charAt(9) != 'w'){
+                        int i = 9;
+                        char c = '-';
+                        while(c != '/'){
+                            c = newsUrl.charAt(i);
+                            sourceName.append(c);
+                            i++;
+                        }
+                    } else if(newsUrl.charAt(4) == ':'
+                            || newsUrl.charAt(8) == 'w'
+                            || newsUrl.charAt(9) == 'w'){
+                        int i = 11;
+                        char c = '-';
+                        while(c != '/') {
+                            c = newsUrl.charAt(i);
+                            sourceName.append(c);
+                            i++;
+                        }
+                    } else if(newsUrl.charAt(4) == ':'
+                            || newsUrl.charAt(7) != 'w'
+                            || newsUrl.charAt(8) != 'w'){
+                        int i = 7;
+                        char c = '-';
+                        while(c != '/') {
+                            c = newsUrl.charAt(i);
+                            sourceName.append(c);
+                            i++;
+                        }
+                    }
+
+                    n.setSourceName(sourceName.toString());*/
                     newsRepository.save(n);
-
+                    log.info(n.toString());
                 }
 
             }

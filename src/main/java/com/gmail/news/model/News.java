@@ -16,11 +16,11 @@ public class News {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //@JsonProperty("author")
-    @Column(name = "source_id")
-    private String sourceId;
+    @JsonIgnore
+    @Column(name = "category")
+    private String category;
 
-    //@JsonProperty("author")
+    @JsonIgnore
     @Column(name = "source_name")
     private String sourceName;
 
@@ -104,19 +104,27 @@ public class News {
         this.publishedAt = publishedAt;
     }
 
-     public String getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
     public String getSourceName() {
         return sourceName;
     }
 
     public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
