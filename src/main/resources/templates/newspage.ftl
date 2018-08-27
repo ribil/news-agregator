@@ -6,9 +6,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-8 mt-5">
 
-            <h5 class="mt-5 mb-5">${country} news:</h5>
-
-                <#list newslist as news>
+            <h3 class="mt-5 mb-5">${news.title}</h3>
 
                     <div class="card mb-3">
                         <img class="card-img-top" src="${news.urlToImage?ifExists}">
@@ -21,9 +19,10 @@
                         </div>
                     </div>
 
-                <#else>
-                    <h5>No news =(</h5>
-                </#list>
+
+
+
+
 
         </div><!--End col-sm-md-->
     </div><!--End row-->

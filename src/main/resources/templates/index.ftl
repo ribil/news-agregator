@@ -4,27 +4,26 @@
 <@c.page>
 <div class="container">
     <div class="row">
-        <div class="col-sm-8 col-md-6 mt-5">
+        <div class="col-sm-8 col-md-8 mt-5">
 
-            <h5 class="mt-5">All news</h5>
+            <h4 class="mt-5 mb-5">ALL NEWS:</h4>
 
-            <ul class="list-group mt-3">
+            <#list newslist as news>
 
-                <#list newslist as news>
-                    <li class="list-group-item">
-                        <p><a style="color: darkslategray" target="_blank" href="/selected_news/${news.id}">${news.title?ifExists}</a></p>
-                        <p>${news.country}</p>
-                        <p>${news.author?ifExists}</p>
-                        <p>${news.description?ifExists}</p>
-                        <p><a href="${news.url?ifExists}">url</a></p>
-                        <p>${news.publishedAt?ifExists}</p>
-                        <p><img width="100px" src="${news.urlToImage?ifExists}"</p>
+                    <div class="card mb-3">
+                        <img class="card-img-top" src="${news.urlToImage?ifExists}">
+                        <div class="card-body">
+                            <h5 class="card-title"><a target="_blank" href="/selected_news/${news.title}">${news.title?ifExists}</a></h5>
+                            <p class="card-text">${news.description?ifExists}</p>
+                            <p class="card-text"><small class="text-muted"><a href="${news.url?ifExists}">Source</a></small></p>
+                            <p class="card-text"><small class="text-muted">${news.author?ifExists}</small></p>
+                            <p class="card-text"><small class="text-muted">${news.publishedAt?substring(0, 10)} ${news.publishedAt?substring(11, 19)}</small></p>
+                        </div>
+                    </div>
 
-                    </li>
-                <#else>
+            <#else>
                     <h5>No news =(</h5>
-                </#list>
-            </ul>
+            </#list>
 
         </div><!--End col-sm-md-->
     </div><!--End row-->

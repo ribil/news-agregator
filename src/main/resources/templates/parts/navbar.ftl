@@ -13,10 +13,10 @@
                 <a class="nav-link" href="/news/us">USA</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/news/ru">Russia</span></a>
+                <a class="nav-link" href="/news/mx">Mexico</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/news/ua">Ukraine</span></a>
+                <a class="nav-link" href="/news/pl">Poland</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/news/gb">Great Britain</span></a>

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.mapping.Map;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "news")
@@ -19,6 +20,10 @@ public class News {
     @JsonIgnore
     @Column(name = "category")
     private String category;
+
+    @JsonIgnore
+    @Column(name = "generated_url")
+    private String generatedUrl;
 
     @JsonIgnore
     @Column(name = "source_name")
@@ -126,5 +131,54 @@ public class News {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getGeneratedUrl() {
+        return generatedUrl;
+    }
+
+    public void setGeneratedUrl(String generatedUrl) {
+        this.generatedUrl = generatedUrl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        News news = (News) o;
+        return Objects.equals(id, news.id) &&
+                Objects.equals(category, news.category) &&
+                Objects.equals(generatedUrl, news.generatedUrl) &&
+                Objects.equals(sourceName, news.sourceName) &&
+                Objects.equals(country, news.country) &&
+                Objects.equals(author, news.author) &&
+                Objects.equals(title, news.title) &&
+                Objects.equals(description, news.description) &&
+                Objects.equals(url, news.url) &&
+                Objects.equals(urlToImage, news.urlToImage) &&
+                Objects.equals(publishedAt, news.publishedAt);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, category, generatedUrl, sourceName, country, author, title, description, url, urlToImage, publishedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", generatedUrl='" + generatedUrl + '\'' +
+                ", sourceName='" + sourceName + '\'' +
+                ", country='" + country + '\'' +
+                ", author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", urlToImage='" + urlToImage + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                '}';
     }
 }

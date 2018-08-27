@@ -23,6 +23,11 @@ public class NewsServiceImpl {
         return newsList;
     }
 
+    public News findNewsByGeneratedUrl(String generatedUrl){
+        News news = newsRepository.findByGeneratedUrl(generatedUrl);
+        return news;
+    }
+
     public News findNewsById(Long id){
         long newsId = id;
         News news = newsRepository.findById(newsId);

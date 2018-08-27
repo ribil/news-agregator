@@ -12,4 +12,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByCountry(String country);
 
     News findById(long id);
+
+    News findByGeneratedUrl(String generatedUrl);
 }

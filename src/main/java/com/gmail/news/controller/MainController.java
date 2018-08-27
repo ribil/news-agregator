@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -46,19 +48,40 @@ public class MainController {
 
         List<News> newsList = newsService.findNewsByCountry(country);
         model.put("newslist", newsList);
+        if(country.equals("us")){
+            model.put("country", "USA");
+        }
+        if(country.equals("mx")){
+            model.put("country", "Mexico");
+        }
+        if(country.equals("pl")){
+            model.put("country", "Poland");
+        }
+        if(country.equals("gb")){
+            model.put("country", "Great Britain");
+        }
+        if(country.equals("au")){
+            model.put("country", "Australia");
+        }
         return "country";
     }
 
     // Отдельная новость
-    @GetMapping("/selected_news/{id}")
+    @GetMapping("/selected_news/{title}")
     public String specificNews(
             Map<String, Object> model,
-            @PathVariable("id") Long id
+            @PathVariable("title") String generatedUrl
     ) {
+        String url = new String();
+        try {
+            url = URLEncoder.encode(generatedUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        News news = newsService.findNewsById(id);
+        News news = newsService.findNewsByGeneratedUrl(url);
         model.put("news", news);
-        return "news";
+        return "newspage";
     }
 
     // Страница результатов поиска
