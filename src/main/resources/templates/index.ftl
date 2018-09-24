@@ -1,4 +1,5 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/pager.ftl" as p>
 
 
 <@c.page>
@@ -6,18 +7,29 @@
     <div class="row">
         <div class="col-sm-8 col-md-8 mt-5">
 
-            <h4 class="mt-5 mb-5">ALL NEWS:</h4>
+            <h4 class="mt-5 mb-4">ALL NEWS:</h4>
 
-            <#list newslist as news>
+            <@p.pager url page />
+
+            <br>
+            <#list page.content as news>
 
                     <div class="card mb-3">
                         <img class="card-img-top" src="${news.urlToImage?ifExists}">
                         <div class="card-body">
-                            <h5 class="card-title"><a target="_blank" href="/selected_news/${news.title}">${news.title?ifExists}</a></h5>
+                            <h5 class="card-title"><a target="_blank"
+                                                      href="/selected_news/${news.title}">${news.title?ifExists}</a>
+                            </h5>
                             <p class="card-text">${news.description?ifExists}</p>
-                            <p class="card-text"><small class="text-muted"><a href="${news.url?ifExists}">Source</a></small></p>
-                            <p class="card-text"><small class="text-muted">${news.author?ifExists}</small></p>
-                            <p class="card-text"><small class="text-muted">${news.publishedAt?substring(0, 10)} ${news.publishedAt?substring(11, 19)}</small></p>
+                            <p class="card-text">
+                                <small class="text-muted"><a href="${news.url?ifExists}">Source</a></small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">${news.author?ifExists}</small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">${news.publishedAt?substring(0, 10)} ${news.publishedAt?substring(11, 19)}</small>
+                            </p>
                         </div>
                     </div>
 

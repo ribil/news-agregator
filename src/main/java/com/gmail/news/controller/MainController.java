@@ -4,9 +4,15 @@ import com.gmail.news.model.News;
 import com.gmail.news.service.NewsServiceImpl;
 import com.gmail.news.service.ParserNewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -32,10 +38,14 @@ public class MainController {
 
     // Последние новости на главной
     @GetMapping("/")
-    public String index(Map<String, Object> model) {
+    public String index(Map<String, Object> model,
+                        @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
 
-        List<News> newsList = newsService.findAllNews();
-        model.put("newslist", newsList);
+        Page<News> newsPage = newsService.findAllNewsWithPages(pageable);
+        model.put("page", newsPage);
+        model.put("url", "/");
+
         return "index";
     }
 
@@ -48,21 +58,10 @@ public class MainController {
 
         List<News> newsList = newsService.findNewsByCountry(country);
         model.put("newslist", newsList);
-        if(country.equals("us")){
-            model.put("country", "USA");
-        }
-        if(country.equals("mx")){
-            model.put("country", "Mexico");
-        }
-        if(country.equals("pl")){
-            model.put("country", "Poland");
-        }
-        if(country.equals("gb")){
-            model.put("country", "Great Britain");
-        }
-        if(country.equals("au")){
-            model.put("country", "Australia");
-        }
+
+        String countryName = newsService.findCountryByShort(country);
+        model.put("country", countryName);
+
         return "country";
     }
 
@@ -84,9 +83,17 @@ public class MainController {
         return "newspage";
     }
 
-    // Страница результатов поиска
-
     // Поиск
+    @PostMapping("search")
+    public String searchForm(
+            Map<String, Object> model,
+            @RequestParam("text") String text
+    ){
 
+        List<News> newsList = parserNewsService.searchNews(text);
 
+        model.put("newslist", newsList);
+
+        return "search";
+    }
 }

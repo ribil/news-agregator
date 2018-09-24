@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,40 +49,65 @@ public class ParserNewsServiceImpl {
         for (int country = 0; country < 5; country++) {
             //for (int category = 0; category < 7; category++) {
 
-                String url = "https://newsapi.org/v2/top-headlines?" +
-                        "pageSize=100" +
-                        //"&category=" + categories[category] +
-                        "&country=" + countries[country] +
-                        "&apiKey=7e6a5e980cdd4af698c57bce6c11e278";
+            String url = "https://newsapi.org/v2/top-headlines?" +
+                    "pageSize=100" +
+                    //"&category=" + categories[category] +
+                    "&country=" + countries[country] +
+                    "&apiKey=7e6a5e980cdd4af698c57bce6c11e278";
 
 
-                RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = new RestTemplate();
 
-                NewsResponse response = restTemplate.exchange
-                                (url, HttpMethod.GET, new HttpEntity<>(createHeaders("", "")),
-                                        NewsResponse.class).getBody();
+            NewsResponse response = restTemplate.exchange
+                    (url, HttpMethod.GET, new HttpEntity<>(createHeaders("", "")),
+                            NewsResponse.class).getBody();
 
-                List<News> list = response.getArticles();
-                log.info(response.toString());
+            List<News> list = response.getArticles();
+            log.info(response.toString());
 
-                for (News n : list) {
-                    n.setCountry(countries[country]);
-                    //n.setCategory(categories[category]);
+            for (News n : list) {
+                n.setCountry(countries[country]);
+                //n.setCategory(categories[category]);
 
 
-                    try {
-                        String generatedUrl = URLEncoder.encode(n.getTitle(), "UTF-8");
-                        n.setGeneratedUrl(generatedUrl);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    newsRepository.save(n);
-                    log.info(n.toString());
+                try {
+                    String generatedUrl = URLEncoder.encode(n.getTitle(), "UTF-8");
+                    n.setGeneratedUrl(generatedUrl);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-
+                newsRepository.save(n);
+                log.info(n.toString());
             }
-       // }
+
+        }
+        // }
     }
+
+
+    public List<News> searchNews(String query) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String url = "https://newsapi.org/v2/top-headlines?" +
+                "q=" + query +
+                "&apiKey=7e6a5e980cdd4af698c57bce6c11e278";
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        NewsResponse response = restTemplate.exchange
+                (url, HttpMethod.GET, new HttpEntity<>(createHeaders("", "")),
+                        NewsResponse.class).getBody();
+
+        List<News> list = response.getArticles();
+        log.info(response.toString());
+
+        return list;
+    }
+
 
     public static HttpHeaders createHeaders(String username, String password) {
         return new HttpHeaders() {{
